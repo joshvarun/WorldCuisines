@@ -21,8 +21,8 @@ class User(base):
     profileImage = Column(String(250))
 
 
-class Category(base):
-    __tablename__ = 'category'
+class Cuisine(base):
+    __tablename__ = 'cuisine'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
@@ -49,8 +49,8 @@ class Item(base):
     name = Column(String(250), nullable=False)
     description = Column(String(250), nullable=False)
     imageUrl = Column(String(250), nullable=False)
-    category_id = Column(Integer, ForeignKey('category.id'))
-    category = relationship(Category)
+    cuisine_id = Column(Integer, ForeignKey('cuisine.id'))
+    cuisine = relationship(Category)
     created_by = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
@@ -60,7 +60,7 @@ class Item(base):
             'id': self.id,
             'name': self.name,
             'description': self.description,
-            'category_id': self.category_id,
+            'cuisine_id': self.cuisine_id,
             'created_by': self.created_by,
             'imageUrl': self.imageUrl,
         }
