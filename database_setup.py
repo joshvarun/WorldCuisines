@@ -2,7 +2,8 @@
 # Item Catalog
 # Written: January 12, 2019 by Varun Joshi
 
-import os, sys
+import os
+import sys
 from sqlalchemy import Column, ForeignKey, String, Integer, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -32,12 +33,11 @@ class Category(base):
     @property
     def serialize(self):
         return {
-            'id'            : self.id,
-            'name'          : self.name,
-            'description'   : self.description,
-            'created_by'    : self.created_by,
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'created_by': self.created_by,
         }
-    
 
 
 class Item(base):
@@ -54,11 +54,11 @@ class Item(base):
     @property
     def serialize(self):
         return {
-            'id'            : self.id,
-            'name'          : self.name,
-            'description'   : self.description,
-            'category_id'   : self.category_id,
-            'created_by'    : self.created_by,
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'category_id': self.category_id,
+            'created_by': self.created_by,
         }
 
 
