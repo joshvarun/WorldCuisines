@@ -1,0 +1,83 @@
+<html>
+
+<head>
+    <title>Login to World Cuisines</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="//apis.google.com/js/platform.js?onload=start" async defer> </script>
+
+<!--    <link type="text/css" rel="stylesheet" href="{{ url_for('/resources/css/', filename='style.css') }}">-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="hero-text-box">
+            <h1>Welcome to World Cuisines</h1>
+            <p>Login to continue</p>
+
+            <div class="signin-options">
+                <div id="signinButton">
+                    <span class="g-signin" data-scope="openid email" data-clientid="796812613876-86js05o53te388k0p247h464q14o4a3p.apps.googleusercontent.com" data-redirecturi="postmessage" data-accesstype="offline" data-cookiepolicy="single_host_origin" data-callback="signInCallback" data-approvalprompt="force">
+                    </span>
+                </div>
+
+                <div id="result"></div>
+
+                <script>
+                    console.log('starting function');
+
+                    function signInCallback(authResult) {
+                        if (authResult['code']) {
+                            $('#signinButton').attr('style', 'display: none');
+                            $.ajax({
+                                type: 'POST',
+                                url: '/gconnect?state={{STATE}}',
+                                processData: false,
+                                data: authResult['code'],
+                                contentType: 'application/octet-stream; charset=utf-8',
+                                success: function(result) {
+                                    // Handle or verify the server response if necessary.
+                                    if (result) {
+                                        $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
+                                        setTimeout(function() {
+                                            window.location.href = "/cuisines";
+                                        }, 4000);
+
+                                    } else if (authResult['error']) {
+                                        console.log('There was an error: ' + authResult['error']);
+                                    } else {
+                                        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                                    }
+                                }
+
+                            });
+                        } else {
+                            console.log('Something went wrong');
+                        }
+                    }
+
+                </script>
+                <!--END GOOGLE PLUS SIGN IN -->
+
+            </div>
+        </div>
+
+
+
+
+
+
+    </header>
+
+    <!--
+    <footer>
+        <a href="https://www.pexels.com/photo/flat-lay-photography-of-grilled-meat-on-brown-chopping-board-1268551/?utm_content=attributionCopyText&utm_medium=referral&utm_source=pexels" target="_blank">Photo by rawpixel.com from Pexels</a>
+
+<a href='https://www.freepik.com/free-vector/restaurant-logo-collection_1326876.htm'>Designed by Sabrin_Deirani</a>
+    </footer>
+-->
+
+
+</body>
+
+</html>

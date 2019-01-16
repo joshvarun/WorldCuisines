@@ -12,7 +12,7 @@ from sqlalchemy.orm import relationship
 Base = declarative_base()
 
 
-class User(base):
+class User(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
@@ -21,7 +21,7 @@ class User(base):
     profileImage = Column(String(250))
 
 
-class Cuisine(base):
+class Cuisine(Base):
     __tablename__ = 'cuisine'
 
     id = Column(Integer, primary_key=True)
@@ -42,7 +42,7 @@ class Cuisine(base):
         }
 
 
-class Item(base):
+class Item(Base):
     __tablename__ = 'item'
 
     id = Column(Integer, primary_key=True)
@@ -50,7 +50,7 @@ class Item(base):
     description = Column(String(250), nullable=False)
     imageUrl = Column(String(250), nullable=False)
     cuisine_id = Column(Integer, ForeignKey('cuisine.id'))
-    cuisine = relationship(Category)
+    cuisine = relationship(Cuisine)
     created_by = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
@@ -66,5 +66,5 @@ class Item(base):
         }
 
 
-engine = create_engine('sqlite:///itemcatalog.db')
+engine = create_engine('sqlite:///worldcuisines.db')
 Base.metadata.create_all(engine)
