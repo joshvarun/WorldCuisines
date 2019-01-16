@@ -5,9 +5,11 @@ from database_setup import Base, User, Cuisine, Item
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-import httplib2, json, requests
-
-import random, string
+import httplib2
+import json
+import requests
+import random
+import string
 
 app = Flask(__name__)
 
@@ -20,16 +22,17 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "World Cuisines"
 
-#Login Page
+
+# Login Page
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
-    # return "The current session state is %s" % login_session['state']
     return render_template('login.html', STATE=state)
 
-#Google Sign In Connect method
+
+# Google Sign In Connect method
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     if request.args.get('state') != login_session['state']:
@@ -92,9 +95,9 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
-    
+
     user_id = getUserId(login_session['email'])
-    print ('current user id: %s' % user_id )
+    print ('current user id: %s' % user_id)
     if not user_id:
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
@@ -110,7 +113,8 @@ def gconnect():
     print "done!"
     return output
 
-#Google Sign out method
+
+# Google Sign out method
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session.get('access_token')
@@ -140,63 +144,85 @@ def gdisconnect():
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
-    
 
-#Show all cuisines in database
+
+# Show all cuisines in database
 @app.route('/')
 @app.route('/cuisines/')
 def showCuisines():
-    session = DBSession();
+    session = DBSession()
     cuisines = session.query(Cuisine).all()
-    return render_template('index.html', cuisines = cuisines)
+    return render_template('index.html', cuisines=cuisines)
 
 
 # Add a new cuisine to database
-@app.route('/cuisines/new', methods=('GET','POST'))
+@app.route('/cuisines/new', methods=('GET', 'POST'))
 def addNewCuisine():
     if 'username' not in login_session:
         return redirect('/login')
-    session = DBSession();
+    session = DBSession()
     if request.method == 'POST':
-        newCuisine = Cuisine(name=request.form['name'], description = request.form['description'], imageUrl=request.form['imageUrl'], created_by = getUserId(login_session['email']))
+        newCuisine = Cuisine(name=request.form['name'], description=request.form['description'], imageUrl=request.form['imageUrl'], created_by=getUserId(login_session['email']))
         session.add(newCuisine)
         session.commit()
         flash('New Menu Item Created!')
         return redirect(url_for('showCuisines'))
     else:
         return render_template('newcuisine.html')
-    
-    
-#*************************************************
+
+
+# Edit Cuisine
+@app.route('/cuisines/<int:cuisine_id>/edit/', methods=['GET', 'POST'])
+def editCuisine(cuisine_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    session = DBSession()
+    try:
+        cuisine = session.query(Cuisine).filter_by(id=cuisine_id).one()
+        if request.method == 'POST':
+            if len(request.form['name']) > 0:
+                cuisine.name = request.form['name']
+            if len(request.form['description']) > 0:
+                cuisine.description = request.form['description']
+            if len(request.form['imageUrl']) > 0:
+                cuisine.imageUrl = request.form['imageUrl']
+            return redirect(url_for('showCuisines'))
+        else:
+            return render_template('editcuisine.html', cuisine=cuisine)
+    except Exception:
+        print('No Cuisine found...Redirecting to index')
+        return redirect(url_for('showCuisines'))
+
+
+# *************************************************
 # Get User Information
-#*************************************************
+# *************************************************
 def getUserId(email):
     try:
         session = DBSession()
-        user = session.query(User).filter_by(email = login_session['email']).one()
+        user = session.query(User).filter_by(email=login_session['email']).one()
         return user.id
-    except:
+    except Exception:
         return None
 
 
 def getUserInfo(user_id):
     session = DBSession()
-    user = session.query(User).filter_by(email = login_session['email']).one()
+    user = session.query(User).filter_by(email=login_session['email']).one()
     return user
 
 
 def createUser(login_session):
     session = DBSession()
-    newUser = User(name = login_session['username'], email = login_session['email'], profileImage = login_session['picture'])
+    newUser = User(name=login_session['username'], email=login_session['email'], profileImage=login_session['picture'])
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(email = login_session['email']).one()
+    user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
-#*************************************************
+# *************************************************
 
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
-    
