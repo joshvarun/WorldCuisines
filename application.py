@@ -158,6 +158,8 @@ def showCuisines():
 
 @app.route('/cuisines/new', methods=('GET','POST'))
 def addNewCuisine():
+    if 'username' not in login_session:
+        return redirect('/login')
     session = DBSession();
     if request.method == 'POST':
         newCuisine = Cuisine(name=request.form['name'], description = request.form['description'], imageUrl=request.form['imageUrl'], created_by = getUserId(login_session['email']))
