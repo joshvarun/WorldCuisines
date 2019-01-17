@@ -2,28 +2,31 @@
 <html>
 
 <head>
+    <link type="text/css" rel="stylesheet" href="/static/main_style.css">
+    <link type="text/css" rel="stylesheet" href="/static/form_css.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
     <title>Edit {{cuisine.name}} Cuisine</title>
 </head>
 
 <body>
-    <header>
-        <h1>Edit {{cuisine.name}} Cuisine</h1>
-    </header>
-    <section>
-        <form action="#" method="post">
-            <label for="name">Name:</label>
-            <input type="text" maxlength="50" class="form-control" name="name" placeholder={{cuisine.name}}>
+    <div class="form-box">
+        <header>
+            <h1>Edit {{cuisine.name}} Cuisine</h1>
+        </header>
+        <section>
+            <form action="#" method="post" class="form-container" autocomplete="off">
+                
+                <input type="text" maxlength="50" class="form-control" name="name" placeholder={{cuisine.name}}>
 
-            <label for="description">Description:</label>
-            <textarea class="form-control" maxlength="249" rows="3" name="description" placeholder={{cuisine.description}}></textarea>
+                <textarea class="form-control" maxlength="249" rows="3" name="description" placeholder={{cuisine.description}}></textarea>
 
-            <label for="imageUrl">Image Link:</label>
-            <input type="text" maxlength="250" class="form-control" name="imageUrl" placeholder={{cuisine.imageUrl}}>
+                <input type="text" maxlength="250" class="form-control" name="imageUrl" placeholder={{cuisine.imageUrl}}>
 
-            <button type="submit" class="btn btn-default" id="submit" type="submit">Update</button>
+                <button type="submit" class="btn btn-full" id="submit" type="submit">Update</button>
 
-        </form>
-    </section>
+            </form>
+        </section>
+    </div>
 </body>
 
 </html>

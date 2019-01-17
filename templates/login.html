@@ -5,16 +5,23 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="//apis.google.com/js/platform.js?onload=start" async defer> </script>
 
+    <link type="text/css" rel="stylesheet" href="/static/main_style.css">
+    <link type="text/css" rel="stylesheet" href="/static/style.css">
+<!--
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+-->
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
 </head>
 
 <body>
     <header>
         <div class="hero-text-box">
-            <h1>Welcome to World Cuisines</h1>
-            <p>Login to continue</p>
+            <img src="/static/img/logo.png">
+            <h1>World Cuisines</h1>
+            <p>Discover the world's finest cuisines &amp; their most famous dishes</p>
 
+            <p id="logintext">Login with Google</p>
             <div class="signin-options">
                 <div id="signinButton">
                     <span class="g-signin" data-scope="openid email" data-clientid="796812613876-86js05o53te388k0p247h464q14o4a3p.apps.googleusercontent.com" data-redirecturi="postmessage" data-accesstype="offline" data-cookiepolicy="single_host_origin" data-callback="signInCallback" data-approvalprompt="force">

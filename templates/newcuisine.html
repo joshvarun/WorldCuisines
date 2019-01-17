@@ -2,28 +2,31 @@
 <html>
 
 <head>
+    <link type="text/css" rel="stylesheet" href="/static/main_style.css">
+    <link type="text/css" rel="stylesheet" href="/static/form_css.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
     <title>World Cuisines - Add New Cuisine</title>
 </head>
 
 <body>
-    <header>
-        <h1>Add a new cuisine</h1>
-    </header>
-    <section>
-        <form action="#" method="post">
-            <label for="name">Name:</label>
-            <input type="text" maxlength="50" class="form-control" name="name" placeholder="Name of the cuisine">
+    <div class="form-box">
+        <header>
+            <h1>Add a new cuisine</h1>
+        </header>
+        <section>
+            <form action="#" method="post" class="form-container" autocomplete="off">
+                
+                <input type="text" maxlength="50" class="form-control" name="name" placeholder="Name of the cuisine *" required>
+                <br>
+                <textarea class="form-control" maxlength="249" rows="3" name="description" placeholder="Description of the cuisine *" required></textarea>
+                <br>
+                <input type="text" maxlength="250" class="form-control" name="imageUrl" placeholder="Cuisine Image *" required>
+                <br>
+                <button type="submit" class="btn btn-full" id="submit" type="submit">Add</button>
 
-            <label for="description">Description:</label>
-            <textarea class="form-control" maxlength="249" rows="3" name="description" placeholder="Description of the cuisine"></textarea>
-
-            <label for="imageUrl">Image Link:</label>
-            <input type="text" maxlength="250" class="form-control" name="imageUrl" placeholder="Cuisine Image">
-
-            <button type="submit" class="btn btn-default" id="submit" type="submit">Add</button>
-
-        </form>
-    </section>
+            </form>
+        </section>
+    </div>
 </body>
 
 </html>

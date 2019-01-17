@@ -1,0 +1,67 @@
+html {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://images.pexels.com/photos/302428/pexels-photo-302428.jpeg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    font-family: 'Lato', 'Arial', sans-serif;
+    font-weight: 300;
+}
+
+h1 {
+    font-size: 84px;
+    text-align: center;
+    color: white;
+}
+
+p {
+    font-size: 36px;
+    text-align: center;
+    color: white;
+}
+
+div{
+    display: flex;
+    flex-flow: column;
+    
+}
+
+.btn {
+    transform: translate(-50%,-50%);
+}
+.btn:link,
+.btn:visited {
+    margin-left: 50%;
+    margin-right: 50;
+    float: left;
+    width: 20%;
+    text-align: center;
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-weight: 300;
+    margin-top: 20px;
+    text-decoration: none;
+    border-radius: 200px;
+    color: #fff;
+    transition: background-color 0.2s, border 0.2s, color 0.2s;
+}
+
+.btn-full:link,
+.btn-full:visited {
+    background-color: #e67e22;
+    border: 1px solid #e67e22;
+    margin-right: 15px;
+}
+
+.btn:hover,
+.btn:active {
+    background-color: #cf6d17;
+}
+
+.btn-full:hover,
+.btn-full:active {
+    background-color: #cf6d17;
+    border: 1px solid #cf6d17;
+}

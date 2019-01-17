@@ -190,9 +190,26 @@ def editCuisine(cuisine_id):
         else:
             return render_template('editcuisine.html', cuisine=cuisine)
     except Exception:
-        print('No Cuisine found...Redirecting to index')
-        return redirect(url_for('showCuisines'))
+        return render_template('errorpage.html')
+    
 
+# Delete Cuisine
+@app.route('/cuisines/<int:cuisine_id>/delete/', methods=['GET', 'POST'])
+def deleteCuisine(cuisine_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    session = DBSession()
+    try:
+        cuisine = session.query(Cuisine).filter_by(id=cuisine_id).one()
+        if request.method == 'POST':
+            session.query(Cuisine).filter_by(id=cuisine_id).delete()
+            session.commit()
+            return redirect(url_for('showCuisines'))
+        else:
+            return render_template('deletecuisine.html', cuisine=cuisine)
+    except Exception:
+        return render_template('errorpage.html')
+        
 
 # *************************************************
 # Get User Information

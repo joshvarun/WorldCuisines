@@ -4,20 +4,88 @@
 <head>
     <meta charset="utf-8">
     <title>World Cuisines</title>
+    <link type="text/css" rel="stylesheet" href="/static/main_style.css">
+    <link type="text/css" rel="stylesheet" href="/static/index_css.css">
+    <link href="https://unpkg.com/ionicons@4.5.0/dist/css/ionicons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
+
 </head>
 
 <body>
-    <h1>This page will display all the cuisines</h1>
-    
-    
+    <div class="wrapper">
+        <header>
+            <div class="row">
+                <img src="/static/img/logo.png" alt="World Cuisines Logo" class="logo">
 
-    <section>
+                <ul class="main-nav">
+                    <li><a href="#">Sign up</a></li>
+                </ul>
+            </div>
+        </header>
+        <article>
+            <h1>Good Food, Good Mood.</h1>
+            <h3 id="subtext">The best of cuisines from all around the world.</h3>
+            <!--            <a href="#">-->
+            <div class="cuisine">
+                <img src="/static/img/hero.jpg">
+                <div class="cuisineinfo">
+                    <h3>This is a test</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate placerat eros vitae accumsan. Aenean non diam eget massa interdum dapibus in quis nisi. Donec nisi lacus, bibendum eget lobortis in, finibus sagittis quam. Suspendisse a est dictum, semper orci accumsan, pulvinar dolor.</p>
+                    <div class="options">
+                        <a class="btn btn-full" href="#">View</a>
+                        <i class="icon ion-ios-create">Edit</i>
+                        <i class="icon ion-ios-trash">Delete</i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cuisine">
+                <img src="/static/img/hero.jpg">
+                <div class="cuisineinfo">
+                    <h3>This is a test</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate placerat eros vitae accumsan. Aenean non diam eget massa interdum dapibus in quis nisi. Donec nisi lacus, bibendum eget lobortis in, finibus sagittis quam. Suspendisse a est dictum, semper orci accumsan, pulvinar dolor.</p>
+
+                    <div class="options">
+                        <a class="btn btn-full" href="#">View</a>
+                        <i class="icon ion-ios-create">Edit</i>
+                        <i class="icon ion-ios-trash">Delete</i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cuisine">
+                <img src="/static/img/hero.jpg">
+                <div class="cuisineinfo">
+                    <h3>This is a test</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate placerat eros vitae accumsan. Aenean non diam eget massa interdum dapibus in quis nisi. Donec nisi lacus, bibendum eget lobortis in, finibus sagittis quam. Suspendisse a est dictum, semper orci accumsan, pulvinar dolor.</p>
+
+                    <div class="options">
+                        <a class="btn btn-full" href="#">View</a>
+                        <i class="icon ion-ios-create">Edit</i>
+                        <i class="icon ion-ios-trash">Delete</i>
+                    </div>
+                    
+                </div>
+            </div>
+            <!--            </a>-->
+        </article>
+
+
+
+
+
+        <section>
+            <!--
         {% if cuisines !=[] %}
             {% for i in cuisines %}
                 <h3>{{i.name}}</h3>
             {% endfor %}
+        {% else %}
+             <h3>No cuisines available right now.</h3>
         {% endif %}
-    </section>
+-->
+        </section>
+    </div>
 </body>
 
 </html>
