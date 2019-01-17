@@ -2,8 +2,14 @@
 <html>
 
 <head>
+<!--
     <link type="text/css" rel="stylesheet" href="/static/main_style.css">
     <link type="text/css" rel="stylesheet" href="/static/form_css.css">
+-->
+    
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='form_css.css') }}">
+
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
     <title>World Cuisines - Add New Cuisine</title>
 </head>

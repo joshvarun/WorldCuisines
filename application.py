@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session as login_session, make_response
+from flask import Flask, render_template, request, redirect
+from flask import url_for, flash, jsonify
+from flask import session as login_session, make_response
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Cuisine, Item
@@ -23,7 +25,9 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "World Cuisines"
 
 
+# *************************************
 # Login Page
+# *************************************
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -32,7 +36,9 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
+# *************************************
 # Google Sign In Connect method
+# *************************************
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     if request.args.get('state') != login_session['state']:
@@ -78,8 +84,9 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(
+            json.dumps('Current user is already connected.'), 200
+        )
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -106,9 +113,6 @@ def gconnect():
     output += '<h1>Welcome, '
     output += login_session['username']
     output += '!</h1>'
-    output += '<img src="'
-    output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
@@ -120,13 +124,17 @@ def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
         print 'Access Token is None'
-        response = make_response(json.dumps('Current user not connected.'), 401)
+        response = make_response(
+            json.dumps('Current user not connected.'), 401
+        )
         response.headers['Content-Type'] = 'application/json'
         return response
     print 'In gdisconnect access token is %s', access_token
     print 'User name is: '
     print login_session['username']
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    # If login fails check next 2 lines
+    url = 'https://accounts.google.com/o/oauth2/revoke?token='
+    url += login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     print 'result is '
@@ -141,7 +149,10 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.',
+                       400)
+        )
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -155,14 +166,21 @@ def showCuisines():
     return render_template('index.html', cuisines=cuisines)
 
 
+# *************************************
 # Add a new cuisine to database
+# *************************************
 @app.route('/cuisines/new', methods=('GET', 'POST'))
 def addNewCuisine():
     if 'username' not in login_session:
         return redirect('/login')
     session = DBSession()
     if request.method == 'POST':
-        newCuisine = Cuisine(name=request.form['name'], description=request.form['description'], imageUrl=request.form['imageUrl'], created_by=getUserId(login_session['email']))
+        newCuisine = Cuisine(
+            name=request.form['name'],
+            description=request.form['description'],
+            imageUrl=request.form['imageUrl'],
+            created_by=getUserId(login_session['email'])
+        )
         session.add(newCuisine)
         session.commit()
         flash('New Menu Item Created!')
@@ -171,7 +189,9 @@ def addNewCuisine():
         return render_template('newcuisine.html')
 
 
+# *************************************
 # Edit Cuisine
+# *************************************
 @app.route('/cuisines/<int:cuisine_id>/edit/', methods=['GET', 'POST'])
 def editCuisine(cuisine_id):
     if 'username' not in login_session:
@@ -180,44 +200,120 @@ def editCuisine(cuisine_id):
     try:
         cuisine = session.query(Cuisine).filter_by(id=cuisine_id).one()
         if request.method == 'POST':
-            if len(request.form['name']) > 0:
+            if request.form['name']:
                 cuisine.name = request.form['name']
-            if len(request.form['description']) > 0:
+            if request.form['description']:
                 cuisine.description = request.form['description']
-            if len(request.form['imageUrl']) > 0:
+            if request.form['imageUrl']:
                 cuisine.imageUrl = request.form['imageUrl']
             return redirect(url_for('showCuisines'))
         else:
             return render_template('editcuisine.html', cuisine=cuisine)
     except Exception:
         return render_template('errorpage.html')
-    
 
+
+# *************************************
 # Delete Cuisine
+# *************************************
 @app.route('/cuisines/<int:cuisine_id>/delete/', methods=['GET', 'POST'])
 def deleteCuisine(cuisine_id):
     if 'username' not in login_session:
         return redirect('/login')
     session = DBSession()
     try:
-        cuisine = session.query(Cuisine).filter_by(id=cuisine_id).one()
+        cuisineToDelete = session.query(Cuisine).filter_by(id=cuisine_id).one()
         if request.method == 'POST':
-            session.query(Cuisine).filter_by(id=cuisine_id).delete()
+            session.delete(cuisineToDelete)
+            session.commit()
+            return redirect(url_for('showCuisines'))
+        else:
+            return render_template('deletecuisine.html',
+                                   cuisine=cuisineToDelete)
+    except Exception:
+        return render_template('errorpage.html')
+
+
+# *************************************
+# Add Item to Cuisine
+# *************************************
+@app.route('/cuisines/<int:cuisine_id>/item/new', methods=['GET', 'POST'])
+def addNewItem(cuisine_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    session = DBSession()
+    if request.method == 'POST':
+        newItem = Item(
+            name=request.form['name'],
+            description=request.form['description'],
+            imageUrl=request.form['imageUrl'],
+            created_by=getUserId(login_session['email']),
+            cuisine_id=cuisine_id,
+        )
+        session.add(newItem)
+        session.commit()
+        flash('New Menu Item Created!')
+        return redirect(url_for('showCuisines'))
+    else:
+        return render_template('newcuisine.html')
+
+
+# *************************************
+# Edit Item in Cuisine
+# *************************************
+@app.route('/cuisines/<int:cuisine_id>/item/<int:item_id>/edit',
+           methods=['GET', 'POST'])
+def editItem(cuisine_id, item_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    session = DBSession()
+    try:
+        itemToEdit = session.query(Cuisine).filter_by(id=cuisine_id).one()
+
+        if request.method == 'POST':
+            if len(request.form['name']) > 0:
+                itemToEdit.name = request.form['name']
+            if len(request.form['description']) > 0:
+                itemToEdit.description = request.form['description']
+            if len(request.form['imageUrl']) > 0:
+                itemToEdit.imageUrl = request.form['imageUrl']
+            return redirect(url_for('showCuisines'))
+        else:
+            return render_template('editcuisine.html', itemToEdit=itemToEdit)
+    except Exception:
+        return render_template('errorpage.html')
+
+
+# *************************************
+# Delete item from Cuisine
+# *************************************
+@app.route('/cuisines/<int:cuisine_id>/item/<int:item_id>/delete',
+           methods=['GET', 'POST'])
+def deleteItem(cuisine_id, item_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    session = DBSession()
+    try:
+        itemToDelete = session.query(Item).filter_by(id=item_id).one()
+        if request.method == 'POST':
+            session.delete(itemToDelete)
             session.commit()
             return redirect(url_for('showCuisines'))
         else:
             return render_template('deletecuisine.html', cuisine=cuisine)
     except Exception:
         return render_template('errorpage.html')
-        
 
-# *************************************************
+
+# *************************************
 # Get User Information
-# *************************************************
+# *************************************
 def getUserId(email):
     try:
         session = DBSession()
-        user = session.query(User).filter_by(email=login_session['email']).one()
+        user = session.query(User).filter_by(
+            email=login_session['email']
+        ).one()
         return user.id
     except Exception:
         return None
@@ -231,12 +327,15 @@ def getUserInfo(user_id):
 
 def createUser(login_session):
     session = DBSession()
-    newUser = User(name=login_session['username'], email=login_session['email'], profileImage=login_session['picture'])
+    newUser = User(
+        name=login_session['username'],
+        email=login_session['email'],
+        profileImage=login_session['picture']
+    )
     session.add(newUser)
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
-# *************************************************
 
 
 if __name__ == '__main__':

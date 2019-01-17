@@ -4,8 +4,14 @@
 <head>
     <meta charset="utf-8">
     <title>World Cuisines</title>
+<!--
     <link type="text/css" rel="stylesheet" href="/static/main_style.css">
     <link type="text/css" rel="stylesheet" href="/static/index_css.css">
+-->
+    
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='index_css.css') }}">
+
     <link href="https://unpkg.com/ionicons@4.5.0/dist/css/ionicons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
 
@@ -23,9 +29,35 @@
             </div>
         </header>
         <article>
+<!--
             <h1>Good Food, Good Mood.</h1>
             <h3 id="subtext">The best of cuisines from all around the world.</h3>
+-->
             <!--            <a href="#">-->
+
+            {% if cuisines !=[] %}
+            <h1>Good Food, Good Mood.</h1>
+            <h3 id="subtext">The best of cuisines from all around the world.</h3>
+            {% for i in cuisines %}
+            <div class="cuisine">
+                <img src="/static/img/hero.jpg">
+                <div class="cuisineinfo">
+                    <h3>This is a test</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate placerat eros vitae accumsan. Aenean non diam eget massa interdum dapibus in quis nisi. Donec nisi lacus, bibendum eget lobortis in, finibus sagittis quam. Suspendisse a est dictum, semper orci accumsan, pulvinar dolor.</p>
+                    <div class="options">
+                        <a class="btn btn-full" href="#">View</a>
+                        <i class="icon ion-ios-create">Edit</i>
+                        <i class="icon ion-ios-trash">Delete</i>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h1>No Cuisines available right now.</h1>
+            <h3 id="subtext">Please add a new cuisine.</h3>
+            <a class="btn btn-full" href="#">Add New</a>
+            {% endif %}
+<!--
             <div class="cuisine">
                 <img src="/static/img/hero.jpg">
                 <div class="cuisineinfo">
@@ -64,9 +96,10 @@
                         <i class="icon ion-ios-create">Edit</i>
                         <i class="icon ion-ios-trash">Delete</i>
                     </div>
-                    
+
                 </div>
             </div>
+-->
             <!--            </a>-->
         </article>
 
