@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--
+    <link type="text/css" rel="stylesheet" href="/static/main_style.css">
+    <link type="text/css" rel="stylesheet" href="/static/form_css.css">
+-->
+    <link rel="shortcut icon" type="image/png" href="/static/img/icon.png" />
+
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='form_css.css') }}">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
+    <title>{{cuisine_name}} Cuisine - Add New Item</title>
+</head>
+
+<body>
+    <div class="form-box">
+        <header>
+            <h1>Add a new item to {{cuisine_name}} Cuisine</h1>
+        </header>
+        <section>
+            <form action="#" method="post" class="form-container" autocomplete="off">
+
+                <input type="text" maxlength="50" class="form-control" name="name" placeholder="Name of the item *" required>
+                <br>
+                <textarea class="form-control" maxlength="249" rows="3" name="description" placeholder="Description of the item *" required></textarea>
+                <br>
+                <input type="text" maxlength="250" class="form-control" name="imageUrl" placeholder="Item Image *" required>
+                <br>
+                <button type="submit" class="btn btn-full" id="submit" type="submit">Add</button>
+
+            </form>
+        </section>
+    </div>
+</body>
+
+</html>

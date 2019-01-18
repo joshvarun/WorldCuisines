@@ -1,0 +1,90 @@
+html {
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
+
+.form-box {
+    display: flex;
+    flex-flow: column nowrap;
+    border-radius: 40px;
+    width: 800px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 40px;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+h1 {
+    margin: 10px;
+}
+
+.profile-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 100px;
+    margin-right: 10px;
+}
+
+
+p {
+    margin: 10px;
+}
+.btn:link,
+.btn:visited {
+    float: left;
+    width: 40%;
+    text-align: center;
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-weight: 300;
+    margin: 10px;
+    text-decoration: none;
+    border-radius: 200px;
+    color: #fff;
+    transition: background-color 0.2s, border 0.2s, color 0.2s;
+}
+
+.btn-full:link,
+.btn-full:visited {
+    background-color: #e67e22;
+    border: 1px solid #e67e22;
+    margin-right: 15px;
+}
+
+.btn:hover,
+.btn:active {
+    background-color: #cf6d17;
+}
+
+.btn-full:hover,
+.btn-full:active {
+    background-color: #cf6d17;
+    border: 1px solid #cf6d17;
+}
+
+button {
+    width: 40%;
+    height: auto;
+    margin-left: 50%;
+    margin-right: 50%;
+    margin-top: 40px;
+    transform: translate(-50%,-50%);
+    border: 0;
+    text-transform: uppercase;
+    padding: 5px;
+    outline: 0;
+    border-radius: 200px;
+    color: #fff;
+    background-color: #e67e22;
+    font-size: 22px;
+    font-weight: 400;
+}

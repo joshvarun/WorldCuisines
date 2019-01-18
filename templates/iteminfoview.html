@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html style="background-image: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)), url({{item.imageUrl}})">
+
+<head>
+    <!--
+    <link type="text/css" rel="stylesheet" href="/static/main_style.css">
+    <link type="text/css" rel="stylesheet" href="/static/form_css.css">
+-->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='iteminfo.css') }}">
+    <link rel="shortcut icon" type="image/png" href="/static/img/icon.png" />
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
+    <title>{{cuisine.name}} Cuisine - {{item.name}}</title>
+</head>
+
+<body>
+    <div class="form-box">
+        <h1>{{item.name}}</h1>
+        <p class="item_description">{{item.description}}</p>
+        <a class="btn btn-full" target="_blank" href="https://www.google.com/search?&q={{item.name}}%20recipes">Check Recipes</a>
+    </div>
+
+</body>
+
+</html>
