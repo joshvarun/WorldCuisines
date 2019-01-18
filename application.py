@@ -189,51 +189,6 @@ def addNewCuisine():
 
 
 # *************************************
-# Edit Cuisine - TO REMOVE
-# *************************************
-@app.route('/cuisines/<string:cuisine_name>/edit/', methods=['GET', 'POST'])
-def editCuisine(cuisine_name):
-    if 'username' not in login_session:
-        return redirect('/login')
-    session = DBSession()
-    try:
-        cuisine = session.query(Cuisine).filter_by(name=cuisine_name).one()
-        if request.method == 'POST':
-            if request.form['name']:
-                cuisine.name = request.form['name']
-            if request.form['description']:
-                cuisine.description = request.form['description']
-            if request.form['imageUrl']:
-                cuisine.imageUrl = request.form['imageUrl']
-            return redirect(url_for('showCuisines'))
-        else:
-            return render_template('editcuisine.html', cuisine=cuisine)
-    except Exception:
-        return render_template('errorpage.html')
-
-
-# *************************************
-# Delete Cuisine - TO REMOVE
-# *************************************
-@app.route('/cuisines/<int:cuisine_id>/delete/', methods=['GET', 'POST'])
-def deleteCuisine(cuisine_id):
-    if 'username' not in login_session:
-        return redirect('/login')
-    session = DBSession()
-    try:
-        cuisineToDelete = session.query(Cuisine).filter_by(id=cuisine_id).one()
-        if request.method == 'POST':
-            session.delete(cuisineToDelete)
-            session.commit()
-            return redirect(url_for('showCuisines'))
-        else:
-            return render_template('deletecuisine.html',
-                                   cuisine=cuisineToDelete)
-    except Exception:
-        return render_template('errorpage.html')
-
-
-# *************************************
 # Add Item to Cuisine
 # *************************************
 @app.route('/cuisines/<string:cuisine_name>/item/new', methods=['GET', 'POST'])
