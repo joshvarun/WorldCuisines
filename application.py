@@ -129,12 +129,11 @@ def gdisconnect():
         )
         response.headers['Content-Type'] = 'application/json'
         return response
-    print 'In gdisconnect access token is %s', access_token
+    print 'In gdisconnect access token is %s' % access_token
     print 'User name is: '
     print login_session['username']
-    # If login fails check next 2 lines
-    url = 'https://accounts.google.com/o/oauth2/revoke?token='
-    url += login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    print url
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     print 'result is '
@@ -190,15 +189,15 @@ def addNewCuisine():
 
 
 # *************************************
-# Edit Cuisine
+# Edit Cuisine - TO REMOVE
 # *************************************
-@app.route('/cuisines/<int:cuisine_id>/edit/', methods=['GET', 'POST'])
-def editCuisine(cuisine_id):
+@app.route('/cuisines/<string:cuisine_name>/edit/', methods=['GET', 'POST'])
+def editCuisine(cuisine_name):
     if 'username' not in login_session:
         return redirect('/login')
     session = DBSession()
     try:
-        cuisine = session.query(Cuisine).filter_by(id=cuisine_id).one()
+        cuisine = session.query(Cuisine).filter_by(name=cuisine_name).one()
         if request.method == 'POST':
             if request.form['name']:
                 cuisine.name = request.form['name']
@@ -214,7 +213,7 @@ def editCuisine(cuisine_id):
 
 
 # *************************************
-# Delete Cuisine
+# Delete Cuisine - TO REMOVE
 # *************************************
 @app.route('/cuisines/<int:cuisine_id>/delete/', methods=['GET', 'POST'])
 def deleteCuisine(cuisine_id):
@@ -237,8 +236,8 @@ def deleteCuisine(cuisine_id):
 # *************************************
 # Add Item to Cuisine
 # *************************************
-@app.route('/cuisines/<int:cuisine_id>/item/new', methods=['GET', 'POST'])
-def addNewItem(cuisine_id):
+@app.route('/cuisines/<string:cuisine_name>/item/new', methods=['GET', 'POST'])
+def addNewItem(cuisine_name):
     if 'username' not in login_session:
         return redirect('/login')
     session = DBSession()
@@ -248,7 +247,7 @@ def addNewItem(cuisine_id):
             description=request.form['description'],
             imageUrl=request.form['imageUrl'],
             created_by=getUserId(login_session['email']),
-            cuisine_id=cuisine_id,
+            cuisine_id=session.query(Cuisine).filter_by(name=cuisine_name).one().id
         )
         session.add(newItem)
         session.commit()
@@ -261,14 +260,14 @@ def addNewItem(cuisine_id):
 # *************************************
 # Edit Item in Cuisine
 # *************************************
-@app.route('/cuisines/<int:cuisine_id>/item/<int:item_id>/edit',
+@app.route('/cuisines/string:cuisine_name/item/string:item_name/edit',
            methods=['GET', 'POST'])
-def editItem(cuisine_id, item_id):
+def editItem(cuisine_name, item_name):
     if 'username' not in login_session:
         return redirect('/login')
     session = DBSession()
     try:
-        itemToEdit = session.query(Cuisine).filter_by(id=cuisine_id).one()
+        itemToEdit = session.query(Item).filter_by(name=item_name).one()
 
         if request.method == 'POST':
             if len(request.form['name']) > 0:
@@ -279,7 +278,7 @@ def editItem(cuisine_id, item_id):
                 itemToEdit.imageUrl = request.form['imageUrl']
             return redirect(url_for('showCuisines'))
         else:
-            return render_template('editcuisine.html', itemToEdit=itemToEdit)
+            return render_template('edititem.html', itemToEdit=itemToEdit)
     except Exception:
         return render_template('errorpage.html')
 
@@ -287,20 +286,20 @@ def editItem(cuisine_id, item_id):
 # *************************************
 # Delete item from Cuisine
 # *************************************
-@app.route('/cuisines/<int:cuisine_id>/item/<int:item_id>/delete',
+@app.route('/cuisines/<string:cuisine_name>/item/<string:item_name>/delete',
            methods=['GET', 'POST'])
-def deleteItem(cuisine_id, item_id):
+def deleteItem(cuisine_name, item_name):
     if 'username' not in login_session:
         return redirect('/login')
     session = DBSession()
     try:
-        itemToDelete = session.query(Item).filter_by(id=item_id).one()
+        itemToDelete = session.query(Item).filter_by(name=item_name).one()
         if request.method == 'POST':
             session.delete(itemToDelete)
             session.commit()
             return redirect(url_for('showCuisines'))
         else:
-            return render_template('deletecuisine.html', cuisine=cuisine)
+            return render_template('deleteitem.html', item_name=item_name)
     except Exception:
         return render_template('errorpage.html')
 

@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8">
     <title>World Cuisines</title>
-<!--
+    <!--
     <link type="text/css" rel="stylesheet" href="/static/main_style.css">
     <link type="text/css" rel="stylesheet" href="/static/index_css.css">
 -->
-    
+
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='index_css.css') }}">
 
@@ -24,12 +24,17 @@
                 <img src="/static/img/logo.png" alt="World Cuisines Logo" class="logo">
 
                 <ul class="main-nav">
-                    <li><a href="#">Sign up</a></li>
+                    {%if 'username' not in session %}
+                    <li><a href="{{url_for('showLogin')}}">Login</a></li>
+                    {% else %}
+                    <li><a href="{{url_for('addNewCuisine')}}">Add Cuisine</a></li>
+                    <li><a href="{{url_for('gdisconnect')}}">Logout </a>
+                    {% endif %}</li>
                 </ul>
             </div>
         </header>
         <article>
-<!--
+            <!--
             <h1>Good Food, Good Mood.</h1>
             <h3 id="subtext">The best of cuisines from all around the world.</h3>
 -->
@@ -40,14 +45,16 @@
             <h3 id="subtext">The best of cuisines from all around the world.</h3>
             {% for i in cuisines %}
             <div class="cuisine">
-                <img src="/static/img/hero.jpg">
+                <img src="{{i.imageUrl}}">
                 <div class="cuisineinfo">
-                    <h3>This is a test</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate placerat eros vitae accumsan. Aenean non diam eget massa interdum dapibus in quis nisi. Donec nisi lacus, bibendum eget lobortis in, finibus sagittis quam. Suspendisse a est dictum, semper orci accumsan, pulvinar dolor.</p>
+                    <h3>{{i.name}}</h3>
+                    <p>{{i.description}}</p>
                     <div class="options">
                         <a class="btn btn-full" href="#">View</a>
-                        <i class="icon ion-ios-create">Edit</i>
-                        <i class="icon ion-ios-trash">Delete</i>
+                        <!--
+                        <a class="icon-link" href="http://localhost:5000/cuisines/{{i.name}}/edit/"><i class="icon ion-ios-create">Edit</i></a>
+                        <a class="icon-link" href="http://localhost:5000/cuisines/{{i.name}}/edit/"><i class="icon ion-ios-trash">Delete</i></a>
+-->
                     </div>
                 </div>
             </div>
@@ -57,7 +64,7 @@
             <h3 id="subtext">Please add a new cuisine.</h3>
             <a class="btn btn-full" href="#">Add New</a>
             {% endif %}
-<!--
+            <!--
             <div class="cuisine">
                 <img src="/static/img/hero.jpg">
                 <div class="cuisineinfo">
