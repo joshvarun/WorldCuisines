@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html style="background-image: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)), url({{cuisine.imageUrl}})">
+
+<head>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='info.css') }}">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
+    <title>The {{cuisine.name}} Cuisine</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="row">
+
+                <img src="/static/img/logo.png" alt="World Cuisines Logo" class="logo">
+
+                <ul class="main-nav">
+                    {%if 'username' not in session %}
+                    <li><a href="{{url_for('showLogin')}}">Login</a></li>
+                    {% else %}
+                    <li><a href="{{url_for('addNewItem',cuisine_name=cuisine.name)}}">Add Item</a></li>
+                    <li><a href="{{url_for('gdisconnect')}}">Logout </a>
+                        {% endif %}</li>
+                </ul>
+            </div>
+
+        </header>
+        <article>
+            <div class="hero-text-box">
+                <h1 class="hero-text">{{cuisine.name}} Cuisine</h1>
+                <p id="subtext">{{cuisine.description}}</p>
+            </div>
+        </article>
+        <article class="item-list">
+            <h2>The most famous {{cuisine.name}} dishes</h2>
+            <p>Loved all around globe</p>
+            <div class="item-block">
+                <img class="item-img" src="https://images.pexels.com/photos/1415555/pexels-photo-1415555.jpeg">
+                <p class="item-text">Paneer Tikka</p>
+            </div>
+
+        </article>
+
+    </div>
+</body>
+
+</html>

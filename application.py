@@ -156,7 +156,10 @@ def gdisconnect():
         return response
 
 
-# Show all cuisines in database
+# *************************************
+# Show All Cuisines
+# Viewable by all - Does not require login 
+# *************************************
 @app.route('/')
 @app.route('/cuisines/')
 def showCuisines():
@@ -186,6 +189,21 @@ def addNewCuisine():
         return redirect(url_for('showCuisines'))
     else:
         return render_template('newcuisine.html')
+
+
+# *************************************
+# View a cuisine & its items
+# Viewable by all - Does not require login
+# *************************************
+@app.route('/cuisines/<string:cuisine_name>/')
+def viewCuisine(cuisine_name):
+    session = DBSession()
+    try:
+        cuisine = session.query(Cuisine).filter_by(name=cuisine_name).one()
+        items = session.query(Item).filter_by(id=cuisine.id).all()
+        return render_template('infoview.html', cuisine=cuisine)
+    except Exception:
+        return render_template('errorpage.html')
 
 
 # *************************************
