@@ -42,7 +42,7 @@ h1 {
     float: right;
     list-style: none;
     color: white;
-    margin-top: 35px;
+    margin-top: 30px;
 }
 
 .main-nav li {
@@ -101,6 +101,18 @@ img {
     background-color: #fff;
     box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.3);
     border-radius: 20px;
+}
+
+.profile-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 100px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+#username {
+    text-transform: uppercase;
 }
 
 .cuisine h3 {
@@ -171,3 +183,56 @@ i {
     font-weight: 300;
     margin-top: 20px;
 }
+
+footer {
+    display: flex;
+    flex-flow: row nowrap;
+    background-color: #262626;
+}
+
+.footer-container-left {
+    width: 50%;
+    text-align: center;
+    
+}
+
+#created-by {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    color: #8e8e8e;
+    font-weight: 400;   
+}
+
+#footer-text {
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-bottom: 30px;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.footer-container-right {
+    text-align: center;
+    width: 50%;
+}
+
+.social-link {
+    text-decoration-line: none;
+    color: #7b7b7b;
+    font-weight: 400;
+    list-style: none;
+}
+
+.social {
+    text-align: center;
+    display: flex;
+    flex-flow: column nowrap;
+    margin-left: 30%;
+    margin-right: 30%;
+    list-style: none;
+}
+
+.icon {
+    font-size: 26px;
+}
+

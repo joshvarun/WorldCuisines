@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<!--    <link rel="stylesheet" type="text/css" href="/static/error.css">-->
+    <!--    <link rel="stylesheet" type="text/css" href="/static/error.css">-->
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='error.css') }}">
+    <link rel="shortcut icon" type="image/png" href="/static/img/icon.png" />
 
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
 
@@ -13,7 +15,8 @@
     <div class="center">
         <h1>This doesn't seem right.</h1>
         <p>Seems like you stumbled upon the wrong page.</p>
-        <a class="btn btn-full" href="http://localhost:5000/">Go Back</a>
+        <a class="btn btn-full" href="{{url_for('showCuisines')}}">Go Back</a>
     </div>
 </body>
+
 </html>

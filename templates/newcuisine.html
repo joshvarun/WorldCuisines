@@ -2,11 +2,12 @@
 <html>
 
 <head>
-<!--
+    <!--
     <link type="text/css" rel="stylesheet" href="/static/main_style.css">
     <link type="text/css" rel="stylesheet" href="/static/form_css.css">
 -->
-    
+    <link rel="shortcut icon" type="image/png" href="/static/img/icon.png" />
+
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='form_css.css') }}">
 
@@ -21,7 +22,7 @@
         </header>
         <section>
             <form action="#" method="post" class="form-container" autocomplete="off">
-                
+
                 <input type="text" maxlength="50" class="form-control" name="name" placeholder="Name of the cuisine *" required>
                 <br>
                 <textarea class="form-control" maxlength="249" rows="3" name="description" placeholder="Description of the cuisine *" required></textarea>

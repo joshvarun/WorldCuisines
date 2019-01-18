@@ -4,6 +4,7 @@
 <head>
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='info.css') }}">
+    <link rel="shortcut icon" type="image/png" href="/static/img/icon.png" />
 
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
     <title>The {{cuisine.name}} Cuisine</title>
@@ -14,14 +15,15 @@
         <header>
             <div class="row">
 
-                <img src="/static/img/logo.png" alt="World Cuisines Logo" class="logo">
+                <a href="{{url_for('showCuisines')}}"><img src="/static/img/logo.png" alt="World Cuisines Logo" class="logo"></a>
 
                 <ul class="main-nav">
                     {%if 'username' not in session %}
                     <li><a href="{{url_for('showLogin')}}">Login</a></li>
                     {% else %}
-                    <li><a href="{{url_for('addNewItem',cuisine_name=cuisine.name)}}">Add Item</a></li>
-                    <li><a href="{{url_for('gdisconnect')}}">Logout </a>
+                    <li><a href="{{url_for('addNewCuisine')}}">Add Cuisine</a></li>
+                    <li><a href="{{url_for('gdisconnect')}}">Logout </a></li>
+                    <li id="username"><img class="profile-img" src="{{session['picture']}}"> Hi, {{session['username']}}
                         {% endif %}</li>
                 </ul>
             </div>
@@ -34,12 +36,23 @@
             </div>
         </article>
         <article class="item-list">
+
+
+            {% if items !=[] %}
             <h2>The most famous {{cuisine.name}} dishes</h2>
             <p>Loved all around globe</p>
+            {% for i in items %}
             <div class="item-block">
-                <img class="item-img" src="https://images.pexels.com/photos/1415555/pexels-photo-1415555.jpeg">
-                <p class="item-text">Paneer Tikka</p>
+                <img class="item-img" src={{i.imageUrl}}>
+                <p class="item-text">{{i.name}}</p>
             </div>
+            {% endfor %}
+            {% else %}
+            <h2>No items available right now.</h2>
+            <p>Please add a new item.</p>
+            {% endif %}
+
+
 
         </article>
 

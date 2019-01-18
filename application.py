@@ -109,11 +109,7 @@ def gconnect():
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
 
-    output = ''
-    output += '<h1>Welcome, '
-    output += login_session['username']
-    output += '!</h1>'
-    flash("you are now logged in as %s" % login_session['username'])
+    output = 'Login Success'
     print "done!"
     return output
 
@@ -200,8 +196,27 @@ def viewCuisine(cuisine_name):
     session = DBSession()
     try:
         cuisine = session.query(Cuisine).filter_by(name=cuisine_name).one()
-        items = session.query(Item).filter_by(id=cuisine.id).all()
-        return render_template('infoview.html', cuisine=cuisine)
+        print cuisine.id
+        items = session.query(Item).filter_by(cuisine_id=cuisine.id).all()
+        print items
+        return render_template('infoview.html', cuisine=cuisine, items=items)
+    except Exception as e:
+        print e
+        return render_template('errorpage.html')
+
+
+# *************************************
+# View an item from a cuisine
+# Viewable by all - Does not require login
+# Editing Deleteing requires user to be creator
+# *************************************
+@app.route('/cuisines/<string:cuisine_name>/item/<int:item_id>/')
+def viewItem(cuisine_name, item_id):
+    session = DBSession()
+    try:
+        cuisine = session.query(Cuisine).filter_by(name=cuisine_name).one()
+        item = session.query(Item).filter_by(id=item_id).one()
+        return render_template('iteminfoview.html', cuisine=cuisine, item=item)
     except Exception:
         return render_template('errorpage.html')
 
@@ -227,32 +242,34 @@ def addNewItem(cuisine_name):
         flash('New Menu Item Created!')
         return redirect(url_for('showCuisines'))
     else:
-        return render_template('newcuisine.html')
+        return render_template('newitem.html', cuisine_name=cuisine_name)
 
 
 # *************************************
 # Edit Item in Cuisine
 # *************************************
-@app.route('/cuisines/string:cuisine_name/item/string:item_name/edit',
+@app.route('/cuisines/<string:cuisine_name>/item/<int:item_id>/edit',
            methods=['GET', 'POST'])
-def editItem(cuisine_name, item_name):
+def editItem(cuisine_name, item_id):
     if 'username' not in login_session:
         return redirect('/login')
     session = DBSession()
     try:
-        itemToEdit = session.query(Item).filter_by(name=item_name).one()
+        itemToEdit = session.query(Item).filter_by(id=item_id).one()
 
         if request.method == 'POST':
-            if len(request.form['name']) > 0:
+            if request.form['name']:
                 itemToEdit.name = request.form['name']
-            if len(request.form['description']) > 0:
+            if request.form['description']:
                 itemToEdit.description = request.form['description']
-            if len(request.form['imageUrl']) > 0:
+            if request.form['imageUrl']:
                 itemToEdit.imageUrl = request.form['imageUrl']
+            session.commit();
             return redirect(url_for('showCuisines'))
         else:
             return render_template('edititem.html', itemToEdit=itemToEdit)
-    except Exception:
+    except Exception as e:
+        print e 
         return render_template('errorpage.html')
 
 
@@ -272,7 +289,7 @@ def deleteItem(cuisine_name, item_name):
             session.commit()
             return redirect(url_for('showCuisines'))
         else:
-            return render_template('deleteitem.html', item_name=item_name)
+            return render_template('deleteitem.html', itemToDelete=itemToDelete)
     except Exception:
         return render_template('errorpage.html')
 

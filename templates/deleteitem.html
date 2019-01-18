@@ -2,20 +2,21 @@
 <html>
 
 <head>
-<!--
+    <!--
     <link type="text/css" rel="stylesheet" href="/static/main_style.css">
     <link type="text/css" rel="stylesheet" href="/static/form_css.css">
 -->
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='form_css.css') }}">
+    <link rel="shortcut icon" type="image/png" href="/static/img/icon.png" />
 
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
-    <title>Delete {{cuisine.name}}</title>
+    <title>Delete {{itemToDelete.name}}</title>
 </head>
 
 <body>
     <div class="form-box">
-        <h1>Are you sure you want to delete {{item_name}} from database?</h1>
+        <h1>Are you sure you want to delete {{itemToDelete.name}} from database?</h1>
         <p> Warning: This change cannot be reversed.</p>
         <form action="#" method="post">
             <button type="submit" class="btn btn-default" id="submit" type="submit">Yes, I'm sure</button>

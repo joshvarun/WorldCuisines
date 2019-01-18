@@ -2,30 +2,32 @@
 <html>
 
 <head>
-<!--
+    <!--
     <link type="text/css" rel="stylesheet" href="/static/main_style.css">
     <link type="text/css" rel="stylesheet" href="/static/form_css.css">
 -->
-     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
+    <link rel="shortcut icon" type="image/png" href="/static/img/icon.png" />
+
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='form_css.css') }}">
 
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
-    <title>Edit {{cuisine.name}} Cuisine</title>
+    <title>Edit {{itemToEdit.name}}</title>
 </head>
 
 <body>
     <div class="form-box">
         <header>
-            <h1>Edit {{cuisine.name}} Cuisine</h1>
+            <h1>Edit {{itemToEdit.name}} </h1>
         </header>
         <section>
             <form action="#" method="post" class="form-container" autocomplete="off">
-                
-                <input type="text" maxlength="50" class="form-control" name="name" placeholder={{cuisine.name}}>
 
-                <textarea class="form-control" maxlength="249" rows="3" name="description" placeholder={{cuisine.description}}></textarea>
+                <input type="text" maxlength="50" class="form-control" name="name" placeholder={{itemToEdit.name}}>
 
-                <input type="text" maxlength="250" class="form-control" name="imageUrl" placeholder={{cuisine.imageUrl}}>
+                <textarea class="form-control" maxlength="249" rows="3" name="description" placeholder={{itemToEdit.description}}></textarea>
+
+                <input type="text" maxlength="250" class="form-control" name="imageUrl" placeholder={{itemToEdit.imageUrl}}>
 
                 <button type="submit" class="btn btn-full" id="submit" type="submit">Update</button>
 

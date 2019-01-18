@@ -4,11 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>World Cuisines</title>
-    <!--
-    <link type="text/css" rel="stylesheet" href="/static/main_style.css">
-    <link type="text/css" rel="stylesheet" href="/static/index_css.css">
--->
-
+    <link rel="shortcut icon" type="image/png" href="/static/img/icon.png" />
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='main_style.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='index_css.css') }}">
 
@@ -21,25 +17,20 @@
     <div class="wrapper">
         <header>
             <div class="row">
-                <img src="/static/img/logo.png" alt="World Cuisines Logo" class="logo">
+                <a href="{{url_for('showCuisines')}}"><img src="/static/img/logo.png" alt="World Cuisines Logo" class="logo"></a>
 
                 <ul class="main-nav">
                     {%if 'username' not in session %}
                     <li><a href="{{url_for('showLogin')}}">Login</a></li>
                     {% else %}
                     <li><a href="{{url_for('addNewCuisine')}}">Add Cuisine</a></li>
-                    <li><a href="{{url_for('gdisconnect')}}">Logout </a>
-                    {% endif %}</li>
+                    <li><a href="{{url_for('gdisconnect')}}">Logout </a></li>
+                    <li id="username">Hi, {{session['username']}} <img class="profile-img" src="{{session['picture']}}">
+                        {% endif %}</li>
                 </ul>
             </div>
         </header>
         <article>
-            <!--
-            <h1>Good Food, Good Mood.</h1>
-            <h3 id="subtext">The best of cuisines from all around the world.</h3>
--->
-            <!--            <a href="#">-->
-
             {% if cuisines !=[] %}
             <h1>Good Food, Good Mood.</h1>
             <h3 id="subtext">The best of cuisines from all around the world.</h3>
@@ -51,10 +42,6 @@
                     <p>{{i.description}}</p>
                     <div class="options">
                         <a class="btn btn-full" href="#">View</a>
-                        <!--
-                        <a class="icon-link" href="http://localhost:5000/cuisines/{{i.name}}/edit/"><i class="icon ion-ios-create">Edit</i></a>
-                        <a class="icon-link" href="http://localhost:5000/cuisines/{{i.name}}/edit/"><i class="icon ion-ios-trash">Delete</i></a>
--->
                     </div>
                 </div>
             </div>
@@ -64,68 +51,38 @@
             <h3 id="subtext">Please add a new cuisine.</h3>
             <a class="btn btn-full" href="#">Add New</a>
             {% endif %}
-            <!--
-            <div class="cuisine">
-                <img src="/static/img/hero.jpg">
-                <div class="cuisineinfo">
-                    <h3>This is a test</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate placerat eros vitae accumsan. Aenean non diam eget massa interdum dapibus in quis nisi. Donec nisi lacus, bibendum eget lobortis in, finibus sagittis quam. Suspendisse a est dictum, semper orci accumsan, pulvinar dolor.</p>
-                    <div class="options">
-                        <a class="btn btn-full" href="#">View</a>
-                        <i class="icon ion-ios-create">Edit</i>
-                        <i class="icon ion-ios-trash">Delete</i>
-                    </div>
-                </div>
-            </div>
 
-            <div class="cuisine">
-                <img src="/static/img/hero.jpg">
-                <div class="cuisineinfo">
-                    <h3>This is a test</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate placerat eros vitae accumsan. Aenean non diam eget massa interdum dapibus in quis nisi. Donec nisi lacus, bibendum eget lobortis in, finibus sagittis quam. Suspendisse a est dictum, semper orci accumsan, pulvinar dolor.</p>
-
-                    <div class="options">
-                        <a class="btn btn-full" href="#">View</a>
-                        <i class="icon ion-ios-create">Edit</i>
-                        <i class="icon ion-ios-trash">Delete</i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="cuisine">
-                <img src="/static/img/hero.jpg">
-                <div class="cuisineinfo">
-                    <h3>This is a test</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate placerat eros vitae accumsan. Aenean non diam eget massa interdum dapibus in quis nisi. Donec nisi lacus, bibendum eget lobortis in, finibus sagittis quam. Suspendisse a est dictum, semper orci accumsan, pulvinar dolor.</p>
-
-                    <div class="options">
-                        <a class="btn btn-full" href="#">View</a>
-                        <i class="icon ion-ios-create">Edit</i>
-                        <i class="icon ion-ios-trash">Delete</i>
-                    </div>
-
-                </div>
-            </div>
--->
-            <!--            </a>-->
         </article>
 
 
-
-
-
-        <section>
-            <!--
-        {% if cuisines !=[] %}
-            {% for i in cuisines %}
-                <h3>{{i.name}}</h3>
-            {% endfor %}
-        {% else %}
-             <h3>No cuisines available right now.</h3>
-        {% endif %}
--->
-        </section>
     </div>
+    <footer>
+        <div class="footer-container-left">
+            <p id="created-by">Created by Varun Joshi</p>
+            <p id="footer-text">This project was created as part of <a class="social-link" href="http://refer.udacity.com/varu2e4p-1vy?utm_medium-copy" target="_blank">Udacity's Full Stack Web Developer Nanodegree.</a><br /><br />
+                Thank you for checking it out! <br /> <br>
+                More information on available on the project <a class="social-link" href="http://refer.udacity.com/varu2e4p-1vy?utm_medium-copy" target="_blank">GitHub</a> page. </p>
+
+        </div>
+        <div class="footer-container-right">
+            <div class="social">
+                <p id="created-by">Connect with me on</p>
+                <ul>
+                    <li id="username"><a href="http://bit.ly/2DiXfEZ" target="_blank" class="social-link"><i class="icon ion-logo-linkedin"></i> LinkedIn
+                        </a>
+                    </li>
+
+                    <li id="username"><a href="http://bit.ly/2syV6i4" class="social-link" target="_blank"><i class="icon ion-logo-github"></i> GitHub
+                        </a>
+                    </li>
+
+                    <li id="username"><a href="http://bit.ly/2MgY6sw" class="social-link" target="_blank"><i class="icon ion-logo-twitter"></i> Twitter
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>
