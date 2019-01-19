@@ -145,8 +145,13 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
         response = make_response(
-            json.dumps('Failed to revoke token for given user.',
+            json.dumps('Token expired. Resetting session',
                        400)
         )
         response.headers['Content-Type'] = 'application/json'
@@ -182,7 +187,7 @@ def addNewCuisine():
         )
         session.add(newCuisine)
         session.commit()
-        flash('New Menu Item Created!')
+        flash('New Cuisine has been added!')
         return redirect(url_for('showCuisines'))
     else:
         return render_template('newcuisine.html')
@@ -257,7 +262,7 @@ def addNewItem(cuisine_name):
         )
         session.add(newItem)
         session.commit()
-        flash('New Menu Item Created!')
+        flash('New item has been added to %s cuisine' % cuisine.name)
         return redirect(url_for('showCuisines'))
     else:
         return render_template('newitem.html', cuisine_name=cuisine_name)
@@ -287,6 +292,7 @@ def editItem(cuisine_name, item_id):
             if request.form['imageUrl']:
                 itemToEdit.imageUrl = request.form['imageUrl']
             session.commit()
+            flash('Item edited successfully')
             return redirect(url_for('showCuisines'))
         else:
             return render_template('edititem.html', itemToEdit=itemToEdit)
@@ -314,6 +320,7 @@ def deleteItem(cuisine_name, item_id):
         if request.method == 'POST':
             session.delete(itemToDelete)
             session.commit()
+            flash('Item deleted successfully')
             return redirect(url_for('showCuisines'))
         else:
             return render_template(
