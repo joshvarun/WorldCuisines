@@ -27,7 +27,7 @@
                 <div id="signinButton">
                     <span class="g-signin" 
                           data-scope="openid email" 
-                          data-clientid="796812613876-86js05o53te388k0p247h464q14o4a3p.apps.googleusercontent.com" 
+                          data-clientid="796812613876-phfpcvt2f0hkalmijr0vsl7blbseprvv.apps.googleusercontent.com" 
                           data-redirecturi="postmessage" 
                           data-accesstype="offline" 
                           data-cookiepolicy="single_host_origin" 
@@ -42,6 +42,7 @@
                     console.log('starting function');
 
                     function signInCallback(authResult) {
+                        console.log(authResult)
                         if (authResult['code']) {
                             $('#signinButton').attr('style', 'display: none');
                             $.ajax({
