@@ -128,7 +128,8 @@ def gdisconnect():
     print 'In gdisconnect access token is %s' % access_token
     print 'User name is: '
     print login_session['username']
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token='
+    url += login_session['access_token']
     print url
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
@@ -154,7 +155,7 @@ def gdisconnect():
 
 # *************************************
 # Show All Cuisines
-# Viewable by all - Does not require login 
+# Viewable by all - Does not require login
 # *************************************
 @app.route('/')
 @app.route('/cuisines/')
@@ -216,18 +217,21 @@ def viewItem(cuisine_name, item_id):
     try:
         cuisine = session.query(Cuisine).filter_by(name=cuisine_name).one()
         item = session.query(Item).filter_by(id=item_id).one()
+        created_by = session.query(User).filter_by(id=item.created_by).one()
         if 'username' not in login_session:
             return render_template(
-                'iteminfoview.html', 
+                'iteminfoview.html',
                 cuisine=cuisine,
-                item=item
+                item=item,
+                created_by=created_by
             )
         else:
             return render_template(
-                'iteminfoview.html', 
-                cuisine=cuisine, 
+                'iteminfoview.html',
+                cuisine=cuisine,
                 item=item,
-                creator=getUserId(login_session['email'])
+                creator=getUserId(login_session['email']),
+                created_by=created_by
             )
     except Exception as e:
         print e
@@ -242,13 +246,14 @@ def addNewItem(cuisine_name):
     if 'username' not in login_session:
         return redirect('/login')
     session = DBSession()
+    cuisine = session.query(Cuisine).filter_by(name=cuisine_name).one()
     if request.method == 'POST':
         newItem = Item(
             name=request.form['name'],
             description=request.form['description'],
             imageUrl=request.form['imageUrl'],
             created_by=getUserId(login_session['email']),
-            cuisine_id=session.query(Cuisine).filter_by(name=cuisine_name).one().id
+            cuisine_id=cuisine.id
         )
         session.add(newItem)
         session.commit()
@@ -269,11 +274,11 @@ def editItem(cuisine_name, item_id):
     session = DBSession()
     try:
         itemToEdit = session.query(Item).filter_by(id=item_id).one()
-        
+
         if (getUserId(login_session['email']) != itemToEdit.created_by):
             print 'Unauthorized User'
             return redirect('/')
-        
+
         if request.method == 'POST':
             if request.form['name']:
                 itemToEdit.name = request.form['name']
@@ -281,12 +286,12 @@ def editItem(cuisine_name, item_id):
                 itemToEdit.description = request.form['description']
             if request.form['imageUrl']:
                 itemToEdit.imageUrl = request.form['imageUrl']
-            session.commit();
+            session.commit()
             return redirect(url_for('showCuisines'))
         else:
             return render_template('edititem.html', itemToEdit=itemToEdit)
     except Exception as e:
-        print e 
+        print e
         return render_template('errorpage.html')
 
 
@@ -301,17 +306,20 @@ def deleteItem(cuisine_name, item_id):
     session = DBSession()
     try:
         itemToDelete = session.query(Item).filter_by(id=item_id).one()
-        
+
         if (getUserId(login_session['email']) != itemToDelete.created_by):
             print 'Unauthorized User'
             return redirect('/')
-        
+
         if request.method == 'POST':
             session.delete(itemToDelete)
             session.commit()
             return redirect(url_for('showCuisines'))
         else:
-            return render_template('deleteitem.html', itemToDelete=itemToDelete)
+            return render_template(
+                'deleteitem.html',
+                itemToDelete=itemToDelete
+            )
     except Exception:
         return render_template('errorpage.html')
 
@@ -347,6 +355,24 @@ def createUser(login_session):
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
+
+
+# *************************************
+# JSON APIs
+# *************************************
+@app.route('/cuisines/JSON')
+def cuisinesJSON():
+    session = DBSession()
+    cuisines = session.query(Cuisine).all()
+    return jsonify(result=[i.serialize for i in cuisines])
+
+
+@app.route('/cuisines/<string:cuisine_name>/items/JSON')
+def itemJSON(cuisine_name):
+    session = DBSession()
+    cuisine = session.query(Cuisine).filter_by(name=cuisine_name).one()
+    items = session.query(Item).filter_by(cuisine_id=cuisine.id).all()
+    return jsonify(result=[i.serialize for i in items])
 
 
 if __name__ == '__main__':

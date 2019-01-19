@@ -42,10 +42,10 @@
             <h2>The most famous {{cuisine.name}} dishes</h2>
             <p>Loved all around globe</p>
             {% for i in items %}
-            <div class="item-block">
+            <a href="{{url_for('viewItem',cuisine_name=cuisine.name, item_id=i.id)}}"><div class="item-block">
                 <img class="item-img" src={{i.imageUrl}}>
                 <p class="item-text">{{i.name}}</p>
-            </div>
+            </div></a>
             {% endfor %}
             {% else %}
             <h2>No items available right now.</h2>

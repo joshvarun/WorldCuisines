@@ -100,3 +100,19 @@ button {
 .edit-link {
     margin-top: 10px;
 }
+
+.creator {
+    display: flex;
+    flex-flow: column nowrap;
+}
+.creator p {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.creator img {
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+    margin-top: 5px;
+}

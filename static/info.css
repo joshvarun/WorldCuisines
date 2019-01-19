@@ -90,6 +90,10 @@ p {
     border-radius: 20px;
 }
 
+.item-list a {
+    text-decoration: none;
+}
+
 .item-block {
     position: relative;
     width: 40%;
