@@ -55,3 +55,6 @@ $ python application.py
 
 ## Author
 * **Varun Joshi** - *Initial work* - [joshvarun](https://github.com/joshvarun)
+
+## Credits
+1. Background Image, Cuisine & Item Images taken from [Pexels.com](https://www.pexels.com)
