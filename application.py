@@ -364,7 +364,7 @@ def createUser(login_session):
 def cuisinesJSON():
     session = DBSession()
     cuisines = session.query(Cuisine).all()
-    return jsonify(result=[i.serialize for i in cuisines])
+    return jsonify(result=[c.serialize for c in cuisines])
 
 
 @app.route('/cuisines/<string:cuisine_name>/items/JSON')
