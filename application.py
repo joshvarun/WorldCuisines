@@ -216,8 +216,21 @@ def viewItem(cuisine_name, item_id):
     try:
         cuisine = session.query(Cuisine).filter_by(name=cuisine_name).one()
         item = session.query(Item).filter_by(id=item_id).one()
-        return render_template('iteminfoview.html', cuisine=cuisine, item=item)
-    except Exception:
+        if 'username' not in login_session:
+            return render_template(
+                'iteminfoview.html', 
+                cuisine=cuisine,
+                item=item
+            )
+        else:
+            return render_template(
+                'iteminfoview.html', 
+                cuisine=cuisine, 
+                item=item,
+                creator=getUserId(login_session['email'])
+            )
+    except Exception as e:
+        print e
         return render_template('errorpage.html')
 
 
@@ -256,7 +269,11 @@ def editItem(cuisine_name, item_id):
     session = DBSession()
     try:
         itemToEdit = session.query(Item).filter_by(id=item_id).one()
-
+        
+        if (getUserId(login_session['email']) != itemToEdit.created_by):
+            print 'Unauthorized User'
+            return redirect('/')
+        
         if request.method == 'POST':
             if request.form['name']:
                 itemToEdit.name = request.form['name']
@@ -276,14 +293,19 @@ def editItem(cuisine_name, item_id):
 # *************************************
 # Delete item from Cuisine
 # *************************************
-@app.route('/cuisines/<string:cuisine_name>/item/<string:item_name>/delete',
+@app.route('/cuisines/<string:cuisine_name>/item/<int:item_id>/delete',
            methods=['GET', 'POST'])
-def deleteItem(cuisine_name, item_name):
+def deleteItem(cuisine_name, item_id):
     if 'username' not in login_session:
         return redirect('/login')
     session = DBSession()
     try:
-        itemToDelete = session.query(Item).filter_by(name=item_name).one()
+        itemToDelete = session.query(Item).filter_by(id=item_id).one()
+        
+        if (getUserId(login_session['email']) != itemToDelete.created_by):
+            print 'Unauthorized User'
+            return redirect('/')
+        
         if request.method == 'POST':
             session.delete(itemToDelete)
             session.commit()

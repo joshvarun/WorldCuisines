@@ -88,3 +88,15 @@ button {
     font-size: 22px;
     font-weight: 400;
 }
+
+.option a {
+    text-decoration: none;
+    color: #414141;
+    margin-top: 10px;  
+    float: right;   
+    padding: 20px;
+}
+
+.edit-link {
+    margin-top: 10px;
+}

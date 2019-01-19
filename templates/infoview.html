@@ -21,7 +21,7 @@
                     {%if 'username' not in session %}
                     <li><a href="{{url_for('showLogin')}}">Login</a></li>
                     {% else %}
-                    <li><a href="{{url_for('addNewCuisine')}}">Add Cuisine</a></li>
+                    <li><a href="{{url_for('addNewItem',cuisine_name=cuisine.name)}}">Add Item</a></li>
                     <li><a href="{{url_for('gdisconnect')}}">Logout </a></li>
                     <li id="username"><img class="profile-img" src="{{session['picture']}}"> Hi, {{session['username']}}
                         {% endif %}</li>

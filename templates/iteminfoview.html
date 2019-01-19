@@ -11,6 +11,7 @@
     <link rel="shortcut icon" type="image/png" href="/static/img/icon.png" />
 
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
+    <link href="https://unpkg.com/ionicons@4.5.0/dist/css/ionicons.min.css" rel="stylesheet">
     <title>{{cuisine.name}} Cuisine - {{item.name}}</title>
 </head>
 
@@ -18,7 +19,14 @@
     <div class="form-box">
         <h1>{{item.name}}</h1>
         <p class="item_description">{{item.description}}</p>
-        <a class="btn btn-full" target="_blank" href="https://www.google.com/search?&q={{item.name}}%20recipes">Check Recipes</a>
+        <div class="option">
+            <a class="btn btn-full" target="_blank" href="https://www.google.com/search?&q={{item.name}}%20recipes">Check Recipes</a>
+            {% if creator == item.created_by %}
+            <a href="{{url_for('deleteItem',cuisine_name=cuisine.name, item_id=item.id)}}" class="edit-link"><i class="icon ion-ios-trash">Delete</i></a>
+            <a href="{{url_for('editItem',cuisine_name=cuisine.name, item_id=item.id)}}" class="edit-link"><i class="icon ion-ios-create">Edit</i></a>
+            {% endif %}
+            
+        </div>
     </div>
 
 </body>
