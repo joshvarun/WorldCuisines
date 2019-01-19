@@ -13,6 +13,10 @@ import requests
 import random
 import string
 
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 app = Flask(__name__)
 
 engine = create_engine('sqlite:///worldcuisines.db')
@@ -77,7 +81,7 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
+        logger.info("Token's client ID does not match apps.")
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -104,13 +108,13 @@ def gconnect():
     login_session['email'] = data['email']
 
     user_id = getUserId(login_session['email'])
-    print ('current user id: %s' % user_id)
+    logger.info('current user id: %s' % user_id)
     if not user_id:
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
 
     output = 'Login Success'
-    print "done!"
+    logger.info("done!")
     return output
 
 
@@ -130,11 +134,10 @@ def gdisconnect():
     print login_session['username']
     url = 'https://accounts.google.com/o/oauth2/revoke?token='
     url += login_session['access_token']
-    print url
+    logger.info(url)
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    print 'result is '
-    print result
+    logger.info(result)
     if result['status'] == '200':
         del login_session['access_token']
         del login_session['gplus_id']
@@ -202,12 +205,10 @@ def viewCuisine(cuisine_name):
     session = DBSession()
     try:
         cuisine = session.query(Cuisine).filter_by(name=cuisine_name).one()
-        print cuisine.id
         items = session.query(Item).filter_by(cuisine_id=cuisine.id).all()
-        print items
         return render_template('infoview.html', cuisine=cuisine, items=items)
     except Exception as e:
-        print e
+        logger.error(e)
         return render_template('errorpage.html')
 
 
@@ -239,7 +240,7 @@ def viewItem(cuisine_name, item_id):
                 created_by=created_by
             )
     except Exception as e:
-        print e
+        logger.error(e)
         return render_template('errorpage.html')
 
 
@@ -281,7 +282,7 @@ def editItem(cuisine_name, item_id):
         itemToEdit = session.query(Item).filter_by(id=item_id).one()
 
         if (getUserId(login_session['email']) != itemToEdit.created_by):
-            print 'Unauthorized User'
+            logger.warning('Unauthorized User')
             return redirect('/')
 
         if request.method == 'POST':
@@ -297,7 +298,7 @@ def editItem(cuisine_name, item_id):
         else:
             return render_template('edititem.html', itemToEdit=itemToEdit)
     except Exception as e:
-        print e
+        logger.error(e)
         return render_template('errorpage.html')
 
 
@@ -314,7 +315,7 @@ def deleteItem(cuisine_name, item_id):
         itemToDelete = session.query(Item).filter_by(id=item_id).one()
 
         if (getUserId(login_session['email']) != itemToDelete.created_by):
-            print 'Unauthorized User'
+            logger.warning('Unauthorized User')
             return redirect('/')
 
         if request.method == 'POST':
@@ -327,7 +328,8 @@ def deleteItem(cuisine_name, item_id):
                 'deleteitem.html',
                 itemToDelete=itemToDelete
             )
-    except Exception:
+    except Exception as e:
+        logger.info(e)
         return render_template('errorpage.html')
 
 
@@ -375,11 +377,18 @@ def cuisinesJSON():
 
 
 @app.route('/cuisines/<string:cuisine_name>/items/JSON')
-def itemJSON(cuisine_name):
+def itemsJSON(cuisine_name):
     session = DBSession()
     cuisine = session.query(Cuisine).filter_by(name=cuisine_name).one()
     items = session.query(Item).filter_by(cuisine_id=cuisine.id).all()
     return jsonify(result=[i.serialize for i in items])
+
+
+@app.route('/cuisines/<string:cuisine_name>/items/<int:item_id>/JSON')
+def itemJSON(cuisine_name, item_id):
+    session = DBSession()
+    item = session.query(Item).filter_by(id=item_id).one()
+    return jsonify(result=item.serialize)
 
 
 if __name__ == '__main__':
