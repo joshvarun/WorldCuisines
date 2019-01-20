@@ -51,7 +51,11 @@ Run the application.py file to setup the web-server on localhost:8000
 ```bash
 $ python application.py
 ```
+#### Google Client ID - client_secrets.json
 
+To run this project, create a project on the Google Developer Console, & create an OAuth2.0 Credential for it.
+
+Add authorized domains & redirect urls, download the json. Rename the downloaded json as '''client_secrets.json''' & place it in the same folder as '''application.py'''
 
 ## Author
 * **Varun Joshi** - *Initial work* - [joshvarun](https://github.com/joshvarun)
